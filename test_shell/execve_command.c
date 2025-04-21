@@ -1,15 +1,18 @@
 #include "main.h"
 
 /**
- * execve_command - Fonction that creates a child process
- * to execute a command.
- * @tokens: Array of strings containing the command to execute
- * @environ: Array of strings representing the environment variables
+ * execve_command - Fonction that executes a command using
+ * execve in a child process.
+ * @command_path: the full path to the command to execute.
+ * @argv: the arguments to pass to the command (includind
+ * the command itself as argv[0])
+ * @environ: the environnement variables to pass to the
+ * execve function.
  *
  * Return: nothing
  */
 
-int execve_command(char **tokens, char **environ)
+int execve_command(char *command_path, char **argv, char **environ)
 {
 	pid_t child_pid;
 	int status;
@@ -20,9 +23,10 @@ int execve_command(char **tokens, char **environ)
 	{
 		perror("Error fork:");
 	}
+
 	if (child_pid == 0)
 	{
-		if (execve(tokens[0], tokens, environ) == -1)
+		if (execve(command_path, argv, environ) == -1)
 		{
 			perror("Error exercve:");
 		}
