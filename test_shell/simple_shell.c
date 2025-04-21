@@ -24,9 +24,8 @@ int main(void)
 		}
 		/*Replaces the \n character at the end of tokens[0] with \0.*/
 		tokens = split_line(line, " \n");
-		if (!tokens || !tokens[0] || tokens[1])
+		if (!tokens || !tokens[0])
 		{
-			perror("Error execve:");
 			free_tokens(tokens);
 			continue;
 		}
