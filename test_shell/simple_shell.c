@@ -17,10 +17,7 @@ int main(int ac, char **av)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
-		{
 			printf("$ ");
-			fflush(stdout);
-		}
 		if (getline(&line, &len, stdin) == -1)
 		{
 			if (isatty(STDIN_FILENO))
