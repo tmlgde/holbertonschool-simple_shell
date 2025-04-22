@@ -1,49 +1,57 @@
 #include "main.h"
 
 /**
- * find_command_path - Function that searches for a command
- * in the directories listed in PATH.
- * @command: The name of the command to find.
+ * find_command_path - Finds the full path of a command
+ * @command: The command name or path
  *
- * Return: A pointer to a newly allocated string with the full path to the
- * command if found, or NULL if the command is not found or on failure.
-*/
+ * Return: A malloc'd string containing the full path if found and executable,
+ *         or NULL if not found or not executable
+ */
 char *find_command_path(char *command)
 {
-	char *path = _getenv("PATH");
-	char **access_path = split_line(path, ":");
-	struct stat st;
-	int i;
-	char *full_path = NULL;
+	char *path = NULL, *full_path = NULL;
+	char **access_path = NULL;
 	size_t len = 0;
+	int i = 0;
 
-		if (!access_path || !command)
+	/* Test direct : si la commande est un chemin valide (relatif ou absolu) */
+	if (access(command, X_OK) == 0)
+		return (strdup(command)); /* Pas besoin de chercher dans PATH */
+
+	/* Sinon, chercher dans PATH */
+	path = _getenv("PATH");
+	if (!path || !command)
 		return (NULL);
 
-		for (i = 0; access_path[i] != NULL; i++)
-		{
-		/*1 for '/' and 1 for '\0'*/
-		len = strlen(access_path[i]) + strlen(command) + 2;
+	access_path = split_line(path, ":");
+	free(path);
+	if (!access_path)
+		return (NULL);
 
-		full_path = malloc(len * sizeof(char));
+	for (i = 0; access_path[i] != NULL; i++)
+	{
+		/* +2 = '/' + '\0' */
+		len = strlen(access_path[i]) + strlen(command) + 2;
+		full_path = malloc(len);
 		if (!full_path)
 		{
 			free_tokens(access_path);
 			return (NULL);
 		}
-		/*Copy access_path[i] in full_path*/
-		strcpy(full_path, access_path[i]);
-		strcat(full_path, "/");
-		strcat(full_path, command);
 
-		if (stat(full_path, &st) == 0)
+		sprintf(full_path, "%s/%s", access_path[i], command);
+
+		if (access(full_path, X_OK) == 0)
 		{
 			free_tokens(access_path);
-			return (full_path); /*Command found*/
+			return (full_path); /* ✅ Fichier trouvé et exécutable */
 		}
+
 		free(full_path);
 		full_path = NULL;
 	}
+
 	free_tokens(access_path);
-	return (NULL); /*Command not found*/
+	return (NULL); /* ❌ Rien trouvé */
 }
+
