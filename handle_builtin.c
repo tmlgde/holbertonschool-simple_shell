@@ -17,7 +17,7 @@ int handle_builtin(char **tokens)
 	if (strcmp(tokens[0], "exit") == 0)
 	{
 		free_tokens(tokens);
-		exit(0);
+		return (-1);
 	}
 
 	if (strcmp(tokens[0], "env") == 0)
@@ -26,7 +26,6 @@ int handle_builtin(char **tokens)
 		{
 			printf("%s\n", environ[i]);
 		}
-		fflush(stdout);
 		free_tokens(tokens);
 		return (1);
 	}
