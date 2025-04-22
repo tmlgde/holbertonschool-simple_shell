@@ -24,6 +24,7 @@ int main(int ac, char **av)
 				printf("\n");/*Handle Ctrl+D (EOF)*/
 			break;
 		}
+
 		tokens = split_line(line, " \n");
 		if (!tokens || !tokens[0])
 		{
@@ -31,20 +32,18 @@ int main(int ac, char **av)
 			continue;
 		}
 		if (handle_builtin(tokens))
-		{
 			continue;
-		}
 
-			command_path = find_command_path(tokens[0]);
-			if (command_path)
-			{
-				execve_command(command_path, tokens, environ);
-				free(command_path);
-			}
-			else
-				fprintf(stderr, "%s: 1: %s: command not found\n", av[0], tokens[0]);
-		free_tokens(tokens);
+		command_path = find_command_path(tokens[0]);
+		if (command_path)
+		{
+			execve_command(command_path, tokens, environ);
+			free(command_path);
 		}
+		else
+			fprintf(stderr, "%s: 1: %s: command not found\n", av[0], tokens[0]);
+		free_tokens(tokens);
+	}
 	free(line);
 	return (0);
-	}
+}

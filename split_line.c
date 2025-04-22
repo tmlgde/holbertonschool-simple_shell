@@ -2,10 +2,10 @@
 
 /**
  * split_line - Splits a string into tokens using a delimiter
- * @str: The input string to split
- * @delim: The delimiter (e.g. " ", ":\n")
+ * @str: The input string to tokenise
+ * @delim: The delimiter
  *
- * Return: A NULL-terminated array of tokens (each is strdup'd), or NULL on failure
+ * Return: A NULL-terminated array of tokens, or NULL on failure
  */
 char **split_line(const char *str, const char *delim)
 {
@@ -15,18 +15,15 @@ char **split_line(const char *str, const char *delim)
 
 	if (str == NULL)
 		return (NULL);
-
 	copy = strdup(str);
 	if (copy == NULL)
 		return (NULL);
-
 	tokens = malloc(sizeof(char *) * token_size);
 	if (tokens == NULL)
 	{
 		free(copy);
 		return (NULL);
 	}
-
 	token = strtok(copy, delim);
 	while (token != NULL)
 	{
@@ -42,7 +39,6 @@ char **split_line(const char *str, const char *delim)
 			}
 			tokens = temp_tokens;
 		}
-
 		tokens[count] = strdup(token);
 		if (tokens[count] == NULL)
 		{
@@ -50,13 +46,10 @@ char **split_line(const char *str, const char *delim)
 			free(copy);
 			return (NULL);
 		}
-
 		count++;
 		token = strtok(NULL, delim);
 	}
-
 	tokens[count] = NULL;
 	free(copy);
 	return (tokens);
 }
-
