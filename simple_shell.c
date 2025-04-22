@@ -32,9 +32,6 @@ int main(int ac, char **av)
 		}
 		if (handle_builtin(tokens))
 			continue;
-
-		if (access(tokens[0], X_OK) == 0) /*command is a valid path*/
-			execve_command(tokens[0], tokens, environ);
 		else
 		{	/*Otherwise search in the PATH*/
 			command_path = find_command_path(tokens[0]);

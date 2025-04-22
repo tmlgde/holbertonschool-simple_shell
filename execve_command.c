@@ -17,6 +17,9 @@ int execve_command(char *command_path, char **argv, char **environ)
 	pid_t child_pid;
 	int status;
 
+	if (access(tokens[0], X_OK) == 0) /*command is a valid path*/
+		execve_command(tokens[0], tokens, environ);
+
 	child_pid = fork();
 
 	if (child_pid == -1)
