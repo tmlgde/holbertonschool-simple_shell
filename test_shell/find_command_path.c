@@ -18,8 +18,10 @@ char *find_command_path(char *command)
 	size_t len = 0;
 
 	if (!access_path || !command)
+	{
+		free(path);
 		return (NULL);
-
+	}
 	for (i = 0; access_path[i] != NULL; i++)
 	{
 		/*1 for '/' and 1 for '\0'*/
@@ -39,11 +41,13 @@ char *find_command_path(char *command)
 		if (stat(full_path, &st) == 0)
 		{
 			free_tokens(access_path);
+			free(path);
 			return (full_path); /*Command found*/
 		}
 		free(full_path);
 		full_path = NULL;
 	}
 	free_tokens(access_path);
+	free(path);
 	return (NULL); /*Command not found*/
 }

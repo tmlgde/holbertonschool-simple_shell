@@ -2,35 +2,38 @@
 /**
  * main - Programm that interprets a command line
  * as a simple shell.
+ * @ac: argument count
+ * @av: argument vector
  *
  * Return: 0 on success, -1 if it failed
  */
-int main(void)
+int main(int ac, char **av)
 {
 	char *line = NULL, *command_path;
 	size_t len = 0;
-	ssize_t read;
 	char **tokens;
+	(void)ac;
 
 	while (1)
 	{
-		printf("$ ");
-		fflush(stdout);
-		read = getline(&line, &len, stdin);
-		if (read == -1)
+		if (isatty(STDIN_FILENO))
 		{
-			printf("\n");/*Handle Ctrl+D (EOF)*/
+			printf("$ ");
+			fflush(stdout);
+		}
+		if (getline(&line, &len, stdin) == -1)
+		{
+			if (isatty(STDIN_FILENO))
+				printf("\n");/*Handle Ctrl+D (EOF)*/
 			break;
 		}
-		/*Replaces the \n character at the end of tokens[0] with \0.*/
 		tokens = split_line(line, " \n");
 		if (!tokens || !tokens[0])
 		{
 			free_tokens(tokens);
 			continue;
 		}
-		/*Checks if the command is a valid path to an executable*/
-		if (access(tokens[0], X_OK) == 0)
+		if (access(tokens[0], X_OK) == 0) /*command is a valid path*/
 			execve_command(tokens[0], tokens, environ);
 		else
 		{	/*Otherwise search in the PATH*/
@@ -41,7 +44,7 @@ int main(void)
 				free(command_path);
 			}
 			else
-				fprintf(stderr, "%s: command not found\n", tokens[0]);
+				fprintf(stderr, "%s: 1: %s: command not found\n", av[0], tokens[0]);
 		free_tokens(tokens);
 		}
 	}
