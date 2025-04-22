@@ -32,20 +32,12 @@ char **split_line(const char *str, const char *delim)
 			token_size *= 2;
 			temp_tokens = realloc(tokens, sizeof(char *) * token_size);
 			if (temp_tokens == NULL)
-			{
-				free_tokens(tokens);
-				free(copy);
-				return (NULL);
-			}
+				return (free_tokens(tokens), free(copy), NULL);
 			tokens = temp_tokens;
 		}
 		tokens[count] = strdup(token);
 		if (tokens[count] == NULL)
-		{
-			free_tokens(tokens);
-			free(copy);
-			return (NULL);
-		}
+			return (free_tokens(tokens), free(copy), NULL);
 		count++;
 		token = strtok(NULL, delim);
 	}
