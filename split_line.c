@@ -1,23 +1,31 @@
 #include "main.h"
+
 /**
- * split_line - Function that splits a string
- * and returns an array of each word of the string
- * @str: string to split
- * @delim: delimitator
+ * split_line - Splits a string into tokens using a delimiter
+ * @str: The input string to split
+ * @delim: The delimiter (e.g. " ", ":\n")
  *
- * Return: an array of each word of the string
+ * Return: A NULL-terminated array of tokens (each is strdup'd), or NULL on failure
  */
 char **split_line(const char *str, const char *delim)
 {
-	size_t token_size = 10;
-	size_t count = 0;
-	char **tokens = malloc(sizeof(char *) * token_size);
-	char **temp_tokens;
-	char *token;
-	char *copy = strdup(str); /*Copie modifiable de la chaîne d'origine*/
+	size_t token_size = 10, count = 0;
+	char **tokens = NULL, **temp_tokens = NULL;
+	char *copy = NULL, *token = NULL;
 
-	if (tokens == NULL || copy == NULL || str == NULL)
+	if (str == NULL)
 		return (NULL);
+
+	copy = strdup(str);
+	if (copy == NULL)
+		return (NULL);
+
+	tokens = malloc(sizeof(char *) * token_size);
+	if (tokens == NULL)
+	{
+		free(copy);
+		return (NULL);
+	}
 
 	token = strtok(copy, delim);
 	while (token != NULL)
@@ -28,12 +36,21 @@ char **split_line(const char *str, const char *delim)
 			temp_tokens = realloc(tokens, sizeof(char *) * token_size);
 			if (temp_tokens == NULL)
 			{
+				free_tokens(tokens);
 				free(copy);
 				return (NULL);
 			}
 			tokens = temp_tokens;
 		}
+
 		tokens[count] = strdup(token);
+		if (tokens[count] == NULL)
+		{
+			free_tokens(tokens);
+			free(copy);
+			return (NULL);
+		}
+
 		count++;
 		token = strtok(NULL, delim);
 	}
@@ -42,3 +59,4 @@ char **split_line(const char *str, const char *delim)
 	free(copy);
 	return (tokens);
 }
+

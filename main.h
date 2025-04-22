@@ -19,5 +19,6 @@ void free_tokens(char **tokens);
 int execve_command(char *command_path, char **argv, char **environ);
 char *find_command_path(char *command);
 int handle_builtin(char **tokens);
+int main(int ac, char **av);
 
 #endif

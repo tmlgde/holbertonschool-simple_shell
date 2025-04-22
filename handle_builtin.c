@@ -26,6 +26,7 @@ int handle_builtin(char **tokens)
 		{
 			printf("%s\n", environ[i]);
 		}
+		fflush(stdout);
 		free_tokens(tokens);
 		return (1);
 	}

@@ -17,8 +17,11 @@ int execve_command(char *command_path, char **argv, char **environ)
 	pid_t child_pid;
 	int status;
 
-	if (access(tokens[0], X_OK) == 0) /*command is a valid path*/
-		execve_command(tokens[0], tokens, environ);
+	if (access(command_path, X_OK) != 0)
+	{
+		perror("command not found or not executable");
+		return (-1);
+	}
 
 	child_pid = fork();
 
@@ -32,6 +35,7 @@ int execve_command(char *command_path, char **argv, char **environ)
 		if (execve(command_path, argv, environ) == -1)
 		{
 			perror("Error exercve:");
+			exit(EXIT_FAILURE);
 		}
 	}
 	else

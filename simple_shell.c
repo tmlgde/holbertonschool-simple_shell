@@ -31,9 +31,10 @@ int main(int ac, char **av)
 			continue;
 		}
 		if (handle_builtin(tokens))
+		{
 			continue;
-		else
-		{	/*Otherwise search in the PATH*/
+		}
+
 			command_path = find_command_path(tokens[0]);
 			if (command_path)
 			{
@@ -44,7 +45,6 @@ int main(int ac, char **av)
 				fprintf(stderr, "%s: 1: %s: command not found\n", av[0], tokens[0]);
 		free_tokens(tokens);
 		}
-	}
 	free(line);
 	return (0);
-}
+	}
