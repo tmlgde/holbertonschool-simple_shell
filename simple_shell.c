@@ -33,7 +33,7 @@ int main(int ac, char **av)
 		}
 		ret = handle_builtin(tokens);
 		if (ret == -1)
-			exit(0);
+			break;
 		if (ret == 1)
 			continue;
 		command_path = find_command_path(tokens[0]);
