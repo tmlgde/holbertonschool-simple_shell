@@ -98,7 +98,7 @@ valgrind --leak-check=full ./hsh
 The diagram below illustrates the internal logic of the shell's main loop:
 
 <div align="center">
-    <img src="/flowchart.jpg" width="600" height="900">
+    <img src="/flowchart.jpg" width="400" height="900">
 </div>
 
 ---
