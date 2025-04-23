@@ -1,0 +1,71 @@
+.TH hsh 1 "April 2025" "v1.0" "Simple Shell Manual"
+.SH NAME
+hsh \- simple UNIX command line interpreter
+.SH SYNOPSIS
+.B hsh
+.RI [command] ...
+.SH DESCRIPTION
+.B hsh
+is a custom simple shell written in C for the Holberton School project.
+
+It supports executing command-line programs either in interactive mode
+or non-interactive mode. The shell will search for commands using the
+environment PATH if a direct path is not provided.
+
+.SH FEATURES
+.TP
+.B Built-in commands:
+.TP
+.BR exit
+Exit the shell.
+.TP
+.BR env
+Print the current environment variables.
+
+.TP
+.B PATH resolution:
+Commands without slashes are searched for in the directories listed in
+the PATH environment variable.
+
+.TP
+.B Forking:
+The shell forks only if the command exists and is executable.
+No fork is performed if the command is not found.
+
+.TP
+.B Prompt:
+In interactive mode, the shell displays a "\$ " prompt.
+
+.TP
+.B Memory management:
+Memory is dynamically allocated and freed properly to avoid memory leaks.
+
+.SH USAGE
+Interactive mode:
+.EX
+$ ./hsh
+$ ls -l
+$ exit
+.EE
+
+Non-interactive mode:
+.EX
+$ echo "ls -l" | ./hsh
+$ cat script.txt | ./hsh
+.EE
+
+.SH RETURN VALUE
+.B hsh
+returns 0 on success, or another value on error.
+
+.SH AUTHOR
+Written by Tom Lagarde <tom.lagarde33@outlook.fr> 
+Written by Clemence Meynet <clemence.meynet14@gmail.com>
+
+.SH REPORTING BUGS
+Report bugs to <tom.lagarde33@outlook.fr>
+Report bugs to <clemence.meynet14@gmail.com>
+
+.SH COPYRIGHT
+MIT License. See LICENSE file or README for more information.
+
